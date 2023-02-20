@@ -39,6 +39,15 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             switch (messageText) {
                 case "/start" -> startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
+                case "/all" -> {
+                    try {
+                        currency = CurrencyService.getCurrencyRates();
+                    } catch (IOException e) {
+                        sendMessage(chatId, """
+                                We didnt get currency rates.
+                                Please try later.""");
+                    }
+                }
                 default -> {
                     try {
                         currency = CurrencyService.getOneCurrencyRate(messageText, currencyModel);
@@ -50,9 +59,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                                 you want to know in relation to UAH.
                                 For example: USD""");
                     }
-                    sendMessage(chatId, currency);
                 }
             }
+            sendMessage(chatId, currency);
         }
     }
 

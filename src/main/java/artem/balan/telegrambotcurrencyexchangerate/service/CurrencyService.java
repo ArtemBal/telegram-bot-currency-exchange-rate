@@ -15,7 +15,11 @@ public class CurrencyService {
         ObjectMapper objectMapper = new ObjectMapper();
         List<CurrencyModel> list = objectMapper.readValue(new URL("https://bank.gov.ua/NBU_Exchange/exchange?json"),
                 new TypeReference<>() {});
-        return list.toString();
+        StringBuilder stringBuilder = new StringBuilder();
+        for(CurrencyModel cm: list) {
+            stringBuilder.append(cm.getUnits()).append("UAH to ").append(cm.getAmount()).append(" ").append(cm.getCurrencyCodeL()).append("\n");
+        }
+        return stringBuilder.toString();
     }
 
     public static String getOneCurrencyRate(String currency, CurrencyModelOne modelOne) throws IOException, IndexOutOfBoundsException {
